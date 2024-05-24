@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Networths</title>
+    {% load static %}
+  </head>
+  <body
+    style="
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background-color: #f9f9f9;
+    "
+  >
+    <h2 style="color: #333">Profiles of Richest People</h2>
+
+    <div
+      style="
+        display: inline-block;
+        padding: 20px;
+        background-color: #fff;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        margin-bottom: 20px;
+      "
+    >
+      <form method="post" style="margin: 0 auto">
+        {% csrf_token %} {{ form.as_p }}
+        <button
+          type="submit"
+          style="
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+          "
+        >
+          Save
+        </button>
+      </form>
+    </div>
+
+    <h3 style="color: #333">User Saved Data</h3>
+    <div
+      style="
+        display: inline-block;
+        padding: 20px;
+        background-color: #fff;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        margin-bottom: 20px;
+      "
+    >
+      <table
+        border="1"
+        style="
+          width: 100%;
+          border-collapse: collapse;
+          margin: 0 auto;
+          text-align: left;
+        "
+      >
+        <thead>
+          <tr style="background-color: #f2f2f2">
+            <th style="padding: 10px; border: 1px solid #ddd">Name</th>
+            <th style="padding: 10px; border: 1px solid #ddd">Net Worth</th>
+            <th style="padding: 10px; border: 1px solid #ddd">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for profile in profiles %}
+          <tr>
+            <td style="padding: 10px; border: 1px solid #ddd">
+              {{ profile.name }}
+            </td>
+            <td style="padding: 10px; border: 1px solid #ddd">
+              {{ profile.networth }}
+            </td>
+            <td style="padding: 10px; border: 1px solid #ddd">
+              <a
+                href="{% url 'update_profile' profile.id %}"
+                style="
+                  text-decoration: none;
+                  background-color: #007bff;
+                  color: #fff;
+                  padding: 5px 10px;
+                  border: none;
+                  border-radius: 4px;
+                  cursor: pointer;
+                "
+                >Edit</a
+              >
+              <form
+                action="{% url 'delete_profile' profile.id %}"
+                method="post"
+                style="display: inline"
+              >
+                {% csrf_token %}
+                <button
+                  type="submit"
+                  style="
+                    text-decoration: none;
+                    padding: 5px 10px;
+                    background-color: #dc3545;
+                    color: #fff;
+                    border: none;
+                    border-radius: 4px;
+                    cursor: pointer;
+                  "
+                >
+                  Delete
+                </button>
+              </form>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <h3 style="color: #333">Net Worth Distribution</h3>
+    <div
+      style="
+        display: inline-block;
+        padding: 20px;
+        background-color: #fff;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+      "
+    >
+      <img
+        src="data:image/png;base64,{{ data }}"
+        alt="Net Worth Distribution"
+        style="max-width: 100%"
+      />
+      <form method="post" action="{% url 'logout' %}">
+        {% csrf_token %}
+        <button
+          type="submit"
+          style="
+            padding: 10px 20px;
+            background-color: #f10707;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+          "
+        >
+          Logout
+        </button>
+      </form>
+    </div>
+  </body>
+</html>

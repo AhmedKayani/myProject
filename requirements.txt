@@ -1,0 +1,14 @@
+asgiref
+cycler
+Django==3.2
+kiwisolver
+matplotlib
+numpy
+PyJWT
+pyparsing==2.4.7
+python-dateutil
+pytz
+six
+sqlparse
+typing-extensions
+tzdata
