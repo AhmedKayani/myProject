@@ -4,11 +4,10 @@ This is a Django application that demonstrates how to set up and run a Django pr
 
 ## Prerequisites
 
-Before you begin, ensure you have met the following requirements:
+This application has the following versions:
 
-- You have installed Python 3.6 or higher.
-- You have installed Git.
-- You have installed virtualenv.
+- Python: 3.6.8
+- Django: 3.2
 
 ## Installation
 
