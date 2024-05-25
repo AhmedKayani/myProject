@@ -20,7 +20,7 @@ Write these commands in order to set up and run the Django application:
 
 ### 3 .\venv\Scripts\activate  or  source venv/bin/activate
 
-### 4 pip install -r requirements.txt
+### 4 pip3 install -r requirements.txt
 
 ### 5 python manage.py makemigrations
 
