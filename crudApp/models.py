@@ -18,9 +18,9 @@ class Crud(models.Model):
 class Notification(models.Model):
     message = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)
-
     def __str__(self):
         return self.message
+    
 
 @receiver(post_save, sender=Crud)
 def create_user_profile(sender, instance, created, **kwargs):

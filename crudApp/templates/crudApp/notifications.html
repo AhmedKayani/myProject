@@ -1,14 +1,63 @@
 <!DOCTYPE html>
 <html>
-<head>
+  <head>
     <title>Notifications</title>
-</head>
-<body>
-    <h1>Notifications</h1>
-    <ul>
-        {% for notification in notifications %}
-            <li>{{ notification.timestamp }} - {{ notification.message }}</li>
-        {% endfor %}
-    </ul>
-</body>
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f9f9f9;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+      }
+      .container {
+        width: 100%;
+        max-width: 600px;
+        padding: 20px;
+      }
+      .card {
+        background-color: #fff;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        overflow: hidden;
+      }
+      .card-header {
+        background-color: #007bff;
+        color: #fff;
+        padding: 10px 20px;
+        font-size: 1.5em;
+      }
+      .list-group-item {
+        border: none;
+        border-bottom: 1px solid #ddd;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="card">
+        <div class="card-header">Notifications</div>
+        <ul class="list-group list-group-flush">
+          {% for notification in notifications %}
+          <li class="list-group-item">
+            {{ notification.timestamp }} -
+            <strong>{{ notification.message }}</strong>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  </body>
 </html>

@@ -100,6 +100,7 @@ def home_view(request):
     })
 
 # View for the update profile page
+@auth
 def update_home(request, profile_id):
     # Get the profile whose button is clicked
     profile = get_object_or_404(Crud, id=profile_id)
@@ -113,6 +114,7 @@ def update_home(request, profile_id):
     return render(request, 'crudApp/update_home.html', {'form': form, 'profile': profile})
 
 # View for deleting users
+@auth
 def delete_home(request, profile_id):
     profile = get_object_or_404(Crud, id=profile_id)
     if request.method == 'POST':
@@ -120,7 +122,7 @@ def delete_home(request, profile_id):
         return redirect('home')
     return render(request, 'crudApp/delete_home.html', {'profile': profile})
 
-
+@auth
 def notifications_view(request):
     notifications = Notification.objects.all().order_by('-timestamp')
     return render(request, 'crudApp/notifications.html', {'notifications': notifications})
