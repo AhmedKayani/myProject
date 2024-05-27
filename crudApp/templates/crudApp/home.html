@@ -3,6 +3,7 @@
   <head>
     <title>Networths</title>
     {% load static %}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   </head>
   <body
     style="
@@ -129,11 +130,35 @@
         border-radius: 8px;
       "
     >
-      <img
-        src="data:image/png;base64,{{ data }}"
-        alt="Net Worth Distribution"
-        style="max-width: 100%"
-      />
+      <canvas id="myPieChart" style="margin-bottom: 20px"></canvas>
+      <script>
+        var ctx = document.getElementById("myPieChart").getContext("2d");
+        var chartData = JSON.parse("{{ chart_data|escapejs }}");
+        var myPieChart = new Chart(ctx, {
+          type: "pie",
+          data: chartData,
+          options: {
+            responsive: true,
+            plugins: {
+              legend: {
+                position: "top",
+              },
+              tooltip: {
+                callbacks: {
+                  label: function (tooltipItem) {
+                    var label = tooltipItem.label || "";
+                    if (label) {
+                      label += ": ";
+                    }
+                    label += Math.round(tooltipItem.raw * 100) / 100;
+                    return label;
+                  },
+                },
+              },
+            },
+          },
+        });
+      </script>
       <form method="post" action="{% url 'logout' %}">
         {% csrf_token %}
         <button

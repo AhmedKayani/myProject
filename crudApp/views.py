@@ -10,10 +10,8 @@ from django.contrib.auth import login, logout
 # Forms for the user signup, login and the home page
 from .forms import LoginForm, CrudForm 
 
-# For the Pie Chart
-import matplotlib.pyplot as plt
-import io
-import urllib, base64
+# For the chartjs Pie chart data
+import json
 
 # For exceptional Handling
 import traceback
@@ -67,7 +65,6 @@ def logout_view(request):
 # View for the user profile page
 @auth
 def home_view(request):
-    
     if request.method == 'POST':
         form = CrudForm(request.POST)
         if form.is_valid():
@@ -77,30 +74,30 @@ def home_view(request):
         form = CrudForm()
 
     profiles = Crud.objects.all()
-
-    # Pie chart
-    # All the names of the profiles
     names = [profile.name for profile in profiles]
+    networths = [float(profile.networth) for profile in profiles]
 
-    # All the networths of the profiles
-    networths = [profile.networth for profile in profiles]
+    data = {
+        'labels': names,
+        'datasets': [{
+            'data': networths,
+            'backgroundColor': [
+                '#FF6384',
+                '#36A2EB',
+                '#FFCE56',
+                '#4BC0C0',
+                '#9966FF',
+                '#FF9F40',
+                '#FFCD56'
+            ],
+        }]
+    }
 
-    # Settings to make the pie chart look good
-    fig, ax = plt.subplots()
-    ax.pie(networths, labels=names, autopct='%1.1f%%', startangle=90)
-
-    # Equal aspect ratio ensures that pie is drawn as a circle.
-    ax.axis('equal')  
-
-    # Save the pie chart to a buffer
-    buf = io.BytesIO()
-    plt.savefig(buf, format='png')
-    buf.seek(0)
-    string = base64.b64encode(buf.read())
-    uri = urllib.parse.quote(string)
-
-    
-    return render(request, 'crudApp/home.html', {'form': form, 'profiles': profiles,  'data': uri})
+    return render(request, 'crudApp/home.html', {
+        'form': form,
+        'profiles': profiles,
+        'chart_data': json.dumps(data)
+    })
 
 # View for the update profile page
 def update_home(request, profile_id):
