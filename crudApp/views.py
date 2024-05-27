@@ -17,7 +17,7 @@ import json
 import traceback
 
 # For the form of the home page
-from .models import Crud
+from .models import Crud, Notification
 
 # Create your views here.
 # View for the sign up page
@@ -119,6 +119,11 @@ def delete_home(request, profile_id):
         profile.delete()
         return redirect('home')
     return render(request, 'crudApp/delete_home.html', {'profile': profile})
+
+
+def notifications_view(request):
+    notifications = Notification.objects.all().order_by('-timestamp')
+    return render(request, 'crudApp/notifications.html', {'notifications': notifications})
 
 
 

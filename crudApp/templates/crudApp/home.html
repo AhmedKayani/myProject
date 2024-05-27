@@ -12,6 +12,11 @@
       background-color: #f9f9f9;
     "
   >
+    <!-- Notification Section -->
+    {% if latest_notification %}
+    <div class="notification-bar">{{ latest_notification.message }}</div>
+    {% endif %}
+
     <h2 style="color: #333">Profiles of Richest People</h2>
 
     <div
