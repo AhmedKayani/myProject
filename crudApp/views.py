@@ -19,6 +19,9 @@ import traceback
 # For the form of the home page
 from .models import Crud, Notification
 
+# For Pagination
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+
 # Create your views here.
 # View for the sign up page
 @guest
@@ -41,6 +44,7 @@ def signup_view(request):
 # View for the login page
 @guest
 def login_view(request):
+    error_message = False
     try:
         if request.method == 'POST':
             form = AuthenticationForm(request, data=request.POST)
@@ -48,13 +52,15 @@ def login_view(request):
                 user = form.get_user()
                 login(request, user)
                 return redirect('home')
+            else:
+                error_message = True
         else:
             form = AuthenticationForm()
     except Exception as e:
         print("An error occurred during login:")
         print(traceback.format_exc())
         form = AuthenticationForm()
-    return render(request, 'crudApp/login.html', {'form': form})
+    return render(request, 'crudApp/login.html', {'form': form, 'error_message': error_message})
 
 
 def logout_view(request):
@@ -74,6 +80,7 @@ def home_view(request):
         form = CrudForm()
 
     profiles = Crud.objects.all()
+    notifications = Notification.objects.all().order_by('-timestamp')[0]
     names = [profile.name for profile in profiles]
     networths = [float(profile.networth) for profile in profiles]
 
@@ -96,6 +103,7 @@ def home_view(request):
     return render(request, 'crudApp/home.html', {
         'form': form,
         'profiles': profiles,
+        'notifications': notifications,
         'chart_data': json.dumps(data)
     })
 
@@ -125,7 +133,26 @@ def delete_home(request, profile_id):
 @auth
 def notifications_view(request):
     notifications = Notification.objects.all().order_by('-timestamp')
-    return render(request, 'crudApp/notifications.html', {'notifications': notifications})
+
+    # Get the page number
+    page_number = request.GET.get('page', 1)
+
+    # Pagination showing 10 items par page
+    paginator = Paginator(notifications, 10)
+
+    try:
+        page_obj = paginator.page(page_number)
+    except PageNotAnInteger:
+        page_obj = paginator.page(1)
+    except EmptyPage:
+        page_obj = paginator.page(paginator.num_pages)
+
+
+    # Get the page number
+    # page_number = request.GET.get('page')
+    # page_obj = paginator.get_page(page_number)
+
+    return render(request, 'crudApp/notifications.html', {'page_obj': page_obj})
 
 
 

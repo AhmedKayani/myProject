@@ -1,48 +1,79 @@
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
     <title>Update Profile</title>
-  </head>
-  <body
-    style="
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      background-color: #f9f9f9;
-      margin: 0;
-      font-family: Arial, sans-serif;
-    "
-  >
-    <div
-      style="
-        padding: 20px;
-        background-color: #fff;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        border-radius: 8px;
-        text-align: center;
-      "
-    >
-      <h2 style="color: #333">Update Profile</h2>
-      <form
-        method="post"
-        style="display: flex; flex-direction: column; gap: 10px"
-      >
-        {% csrf_token %} {{ form.as_p }}
-        <button
-          type="submit"
-          style="
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-          "
-        >
-          Update
-        </button>
-      </form>
+    {% load static %}
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet" />
+    <link href="{% static 'css/bootstrap-theme.min.css' %}" rel="stylesheet" />
+    <link href="{% static 'css/style.css' %}" rel="stylesheet" />
+</head>
+<body class="form-page-bg">
+      <!-- Notification Section -->
+      <nav class="navbar navbar-default" role="navigation">
+        <div class="container">
+          
+          <div class="navbar-header">
+            <button
+              type="button"
+              class="navbar-toggle"
+              data-toggle="collapse"
+              data-target=".navbar-ex1-collapse"
+            >
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+  
+            <a class="navbar-brand" href="{% url 'home' %}">People Networth</a>
+          </div>
+
+          <div class="collapse navbar-collapse navbar-ex1-collapse">
+  
+            <!-- Functionalities -->
+            <form method="post" class="navbar-form navbar-right" action="{% url 'logout' %}">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-primary btn">Logout</button>
+            </form>
+            <form method="post" class="navbar-form navbar-right" action="{% url 'notifications' %}">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-primary btn">Notifications</button>
+            </form>
+          </div>
+          <!-- /.navbar-collapse -->
+        </div>
+      </nav>
+    <div class="container">
+      <div class="panel panel-default auth-box">
+        <div class="panel-heading">
+          <h2 class="text-center">Update Profile</h2>
+        </div>
+        <div class="panel-body px-2">
+          
+          {% if form.networth.errors %}
+          <div class="alert alert-danger">
+            {% for error in form.networth.errors %}
+            <strong>{{ error }}</strong>
+            {% endfor %}
+          </div>
+          {% endif %}
+          
+          <form method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="id_name">Employee Name</label>
+                <input type="text" name="name" class="form-control input-lg" id="id_name" value="{{ form.name.value }}" placeholder="Enter employee name" required>
+            </div>
+            <div class="form-group form-group-last">
+                <label for="id_networth">Wage</label>
+                <input type="number" name="networth" class="form-control input-lg" id="id_networth" value="{{ form.networth.value }}" placeholder="Enter wage" required>
+            </div>
+            <button type="submit" class="btn btn-primary btn-lg btn-block">Update</button>
+          </form>
+        </div>
+      </div>
     </div>
-  </body>
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+</body>
 </html>
