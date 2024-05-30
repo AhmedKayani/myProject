@@ -10,11 +10,18 @@ from django.contrib.auth import login, logout
 # Forms for the user signup, login and the home page
 from .forms import LoginForm, CrudForm 
 
+# For CRUD operations without page refresh
+from django.http import JsonResponse
+
 # For the chartjs Pie chart data
 import json
 
 # For exceptional Handling
 import traceback
+
+# For the WebSocket notification
+from channels.layers import get_channel_layer
+from asgiref.sync import async_to_sync
 
 # For the form of the home page
 from .models import Crud, Notification
@@ -130,6 +137,7 @@ def delete_home(request, profile_id):
         return redirect('home')
     return render(request, 'crudApp/delete_home.html', {'profile': profile})
 
+# View for the notifications page
 @auth
 def notifications_view(request):
     notifications = Notification.objects.all().order_by('-timestamp')
@@ -153,6 +161,3 @@ def notifications_view(request):
     # page_obj = paginator.get_page(page_number)
 
     return render(request, 'crudApp/notifications.html', {'page_obj': page_obj})
-
-
-

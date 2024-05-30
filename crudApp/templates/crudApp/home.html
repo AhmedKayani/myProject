@@ -39,11 +39,16 @@
     </nav>
 
     <div class="container">
-      {% if notifications.message %}
+      <!-- {% if notifications.message %}
       <div id="alert" class="alert alert-success text-center notify">
         <strong>{{ notifications.message }}</strong>
       </div>
-      {% endif %}
+      {% endif %} -->
+
+      <!-- Channels based notifications -->
+      <div id="notifications" class="alert alert-success text-center notify">
+        
+      </div>
 
       <div class="padding-head panel panel-default auth-box">
         <div class="panel-heading">
@@ -65,8 +70,8 @@
                 <input type="text" name="name" class="form-control input-lg" id="id_name" placeholder="Enter employee name" required>
             </div>
             <div class="form-group form-group-last">
-                <label for="id_networth">Wage</label>
-                <input type="number" name="networth" class="form-control input-lg" id="id_networth" placeholder="Enter wage" required>
+                <label for="id_networth">Networth</label>
+                <input type="number" name="networth" class="form-control input-lg" id="id_networth" placeholder="Enter networth" required>
             </div>
             <button type="submit" class="btn btn-primary btn-lg btn-block">Save</button>
           </form>
@@ -149,17 +154,9 @@
     </div>
 
     <script>
+      // For the data table
       $(document).ready(function () {
         $("#profilesTable").DataTable();
-      });
-
-      document.addEventListener('DOMContentLoaded', function() {
-        var alert = document.getElementById('alert');
-        if (alert) {
-          setTimeout(function() {
-            alert.style.display = 'none';
-          }, 3000); // 3 seconds
-        }
       });
 
       // Download button functionality
@@ -169,24 +166,32 @@
         a.download = 'pie_chart.png';
         a.click();
       });
+    </script>
 
-      // WebSocket for real-time notifications
-      var ws = new WebSocket('ws://' + window.location.host + '/ws/notifications/');
-      ws.onmessage = function(event) {
-        var data = JSON.parse(event.data);
+    <script>
+      var ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
+      var ws_path = ws_scheme + '://' + window.location.host + "/ws/notifications/";
+      var socket = new WebSocket(ws_path);
+
+      socket.onmessage = function(e) {
+        var data = JSON.parse(e.data);
         var message = data['message'];
-        var notificationContainer = document.createElement('div');
-        notificationContainer.className = 'alert alert-success text-center notify';
-        var notificationMessage = document.createElement('strong');
-        notificationMessage.innerText = message;
-        notificationContainer.appendChild(notificationMessage);
+        var notificationsDiv = document.getElementById('notifications');
+        notificationsDiv.textContent = message;
+        notificationsDiv.style.display = 'block';
 
-        document.body.appendChild(notificationContainer);
-
-        // Remove notification after 5 seconds
+        // Hide the notification after 3 seconds
         setTimeout(function() {
-          notificationContainer.remove();
-        }, 5000);
+          notificationsDiv.style.display = 'none';
+        }, 3000);
+      };
+
+      socket.onopen = function() {
+        console.log("WebSocket connection opened.");
+      };
+
+      socket.onclose = function() {
+        console.log("WebSocket connection closed.");
       };
     </script>
 
