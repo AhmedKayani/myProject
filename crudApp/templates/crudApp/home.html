@@ -120,7 +120,11 @@
         </div>
         <div class="panel-body">
           <canvas id="myPieChart" style="margin-bottom: 20px"></canvas>
-          <button id="downloadPieChart" class="btn btn-lg btn-primary justify-content-center download-btn">Download Pie Chart</button>
+          
+          <!-- Download button -->
+          <button id="downloadPieChart" class="download-btn btn btn-lg btn-primary">Download Pie Chart</button>
+          
+          <!-- Script to create pie chart -->
           <script>
             var ctx = document.getElementById("myPieChart").getContext("2d");
             var chartData = JSON.parse("{{ chart_data|escapejs }}");

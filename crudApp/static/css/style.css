@@ -75,5 +75,5 @@
 }
 
 .download-btn {
-  justify-content: center;
+  margin: 0 auto !important;
 }

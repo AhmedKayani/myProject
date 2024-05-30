@@ -81,6 +81,23 @@ def home_view(request):
     if request.method == 'POST':
         form = CrudForm(request.POST)
         if form.is_valid():
+
+            # For implementing AJAX, not completed yet!
+            
+            # Get the form data
+            # data = form.cleaned_data
+            
+            # name1 = data['name']
+            # networth1 = data['networth']
+
+            # data_obj = Crud.objects.create(name=name1, networth=networth1)
+
+            # person = {'name': data_obj.name, 'networth': data_obj.networth}
+
+            # data = {
+            #     'person': person
+            # }
+
             form.save()
             return redirect('home')
     else:
@@ -154,10 +171,5 @@ def notifications_view(request):
         page_obj = paginator.page(1)
     except EmptyPage:
         page_obj = paginator.page(paginator.num_pages)
-
-
-    # Get the page number
-    # page_number = request.GET.get('page')
-    # page_obj = paginator.get_page(page_number)
 
     return render(request, 'crudApp/notifications.html', {'page_obj': page_obj})
